@@ -1,5 +1,5 @@
-import { Component, ViewChild } from "@angular/core";
-import { tasks as tasksData } from 'src/model/tasks';
+import { Component } from "@angular/core";
+import { getState, setState } from "./util";
 
 @Component({
   selector: "app-root",
@@ -9,43 +9,30 @@ import { tasks as tasksData } from 'src/model/tasks';
 export class AppComponent {
   title = "Todo list";
 
-  @ViewChild("inputField") taskLabel;
-  @ViewChild("priorityField") taskPriority;
+  filters = getState("filters") || {
+    priorityOrder: -1,
+    query: ""
+  };
 
-  priorityOrder = -1;
-  query = "";
-  tasks = [];
+  tasks = getState("tasks") || [];
 
-  addTask(inputField, $event) {
-    $event.preventDefault();
-    this.tasks.push({
-      label: this.taskLabel.nativeElement.value,
-      priority: parseInt(this.taskPriority.nativeElement.value)
-    });
-    this.resetForm();
+  filterTasks(obj) {
+    this.filters = {
+      ...this.filters,
+      priorityOrder: obj.priorityOrder,
+      query: obj.query
+    };
   }
 
-  private resetForm() {
-    this.taskLabel.nativeElement.value = "";
-    this.taskPriority.nativeElement.value = "1";
+  deleteTask(id) {
+    this.tasks = this.tasks.filter(task => {
+      return task.id === id ? false : true;
+    }).slice();
+    setState("tasks", this.tasks);
   }
 
-  ngDoCheck() {
-    this.getTasks();
-  }
-
-  getTasks() {
-    this.tasks = tasksData
-      .filter(task => {
-        const label = task.label.toLowerCase();
-        const query = this.query.toLowerCase();
-        return label.includes(query);
-      })
-      .sort((a, b) => {
-        const prioritySelected = parseInt(this.priorityOrder);
-        if (a.priority > b.priority) return prioritySelected;
-        if (a.priority < b.priority) return prioritySelected === -1 ? 1 : -1;
-        if (a.priority === b.priority) return 0;
-      });
+  addTask(task) {
+    this.tasks = [...this.tasks, task];
+    setState("tasks", this.tasks);
   }
 }

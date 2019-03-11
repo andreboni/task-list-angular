@@ -1,0 +1,19 @@
+<form name="new-task">
+    <input
+        [(ngModel)]="task.label"
+        [ngModelOptions]="{standalone: true}"
+        type="text"
+        placeholder="Add Task"
+    >
+    <select
+        [(ngModel)]="task.priority"
+        [ngModelOptions]="{standalone: true}"
+        name="priority"
+        id
+    >
+        <option value="1">Normal</option>
+        <option value="2">Medium</option>
+        <option value="3">High</option>
+    </select>
+    <button (click)="addTask($event)">Add task</button>
+</form>

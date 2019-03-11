@@ -1,38 +1,8 @@
 <h1>{{title}}</h1>
-<input
-    type="search"
-    name
-    id
-    placeholder="search..."
-    [(ngModel)]="query"
->
-<label for="order-by">Order tasks by:</label>
-<select
-    [(ngModel)]="priorityOrder"
-    id="order-by"
-    (change)="getTasks()"
->
-    <option value="-1">High priority</option>
-    <option value="1">Less priority</option>
-</select>
-<ul>
-    <li *ngFor="let task of tasks">{{task.priority}} - {{task.label}}</li>
-</ul>
-<form>
-    <input
-        #inputField
-        type="text"
-        placeholder="add task"
-    >
-    <select
-        #priorityField
-        name="priority"
-        id
-    >
-        <option value="1">Normal</option>
-        <option value="2">Média</option>
-        <option value="3">Alta</option>
-    </select>
-    <button (click)="addTask(inputField, $event)">add task</button>
-
-</form>
+<app-task-filters [filters]="filters" (onFilter)="filterTasks($event)"></app-task-filters>
+<app-task-list
+    [tasks]="tasks"
+    [filters]="filters"
+    (onDeleteTask)="deleteTask($event)"
+></app-task-list>
+<app-add-task (onAddTask)="addTask($event)"></app-add-task>

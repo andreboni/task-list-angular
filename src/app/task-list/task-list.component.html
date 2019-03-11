@@ -1,0 +1,6 @@
+<ul>
+  <li *ngFor="let task of processedTasks">
+    {{task.priority}} - {{task.label}}
+    <button (click)="deleteTask(task.id)">Delete</button>
+  </li>
+</ul>

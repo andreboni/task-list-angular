@@ -1,0 +1,17 @@
+<input
+    type="search"
+    name
+    id
+    placeholder="search..."
+    [(ngModel)]="filters.query"
+    (input)="onFilterHandler($event)"
+>
+<label for="order-by">Order tasks by:</label>
+<select
+    [(ngModel)]="filters.priorityOrder"
+    id="order-by"
+    (change)="onFilterHandler($event)"
+>
+    <option value="-1">Higher priority</option>
+    <option value="1">Lower priority</option>
+</select>
